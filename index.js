@@ -41,11 +41,28 @@ const typeDefs = gql`
   type Query {
     events: [Event]
   }
+
+  type Mutation {
+    createEvent(name: String!, date: String!, sport: String!): Event
+  }
 `;
 
 const resolvers = {
   Query: {
     events: () => events,
+  },
+  Mutation: {
+    createEvent: (_, { name, date, sport }) => {
+      const newEvent = {
+        id: String(events.length + 1),
+        name,
+        date,
+        sport,
+        participants: [],
+      };
+      events.push(newEvent);
+      return newEvent;
+    },
   },
 };
 
