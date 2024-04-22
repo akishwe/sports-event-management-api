@@ -44,6 +44,13 @@ const typeDefs = gql`
 
   type Mutation {
     createEvent(name: String!, date: String!, sport: String!): Event
+    registerParticipant(eventId: ID!, participant: ParticipantInput!): Event
+  }
+
+  input ParticipantInput {
+    id: ID!
+    name: String!
+    age: Int!
   }
 `;
 
@@ -62,6 +69,14 @@ const resolvers = {
       };
       events.push(newEvent);
       return newEvent;
+    },
+    registerParticipant: (_, { eventId, participant }) => {
+      const eventIndex = events.findIndex((event) => event.id === eventId);
+      if (eventIndex === -1) {
+        throw new Error("Event not found!");
+      }
+      events[eventIndex].participants.push(participant);
+      return events[eventIndex];
     },
   },
 };
