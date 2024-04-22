@@ -40,6 +40,7 @@ const typeDefs = gql`
 
   type Query {
     events: [Event]
+    event(id: ID!): Event
   }
 
   type Mutation {
@@ -57,6 +58,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     events: () => events,
+    event: (_, { id }) => events.find((event) => event.id === id),
   },
   Mutation: {
     createEvent: (_, { name, date, sport }) => {
